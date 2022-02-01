@@ -15,7 +15,7 @@ echo '. /opt/varlog/toolbox.ddns/hook-pathadd.bash' >> ~/.bashrc
 # reload ~/.bashrc
 . ~/.bashrc
 # explore the tools
-ddns.duck.sh -h
+ddns.duckdns.sh -h
 ddns.dynu.sh -h
 ddns.ydns.sh -h
 ```
