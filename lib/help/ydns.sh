@@ -12,5 +12,5 @@ HELP_DEMO="
   # update multiple dns records
   # specific ip
   ${THE_SCRIPT} -p foo -u bar -i 8.8.8.8 \\
-  x.ydns.eu y.ydns.eu
+ .  x.ydns.eu y.ydns.eu
 "

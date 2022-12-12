@@ -11,6 +11,8 @@ IP_PROVIDER=""
 
 . "${TOOL_DIR}/lib/bootstrap.sh"
 
+LOG_TOOLNAME=dynu
+
 [[ -n "${OPTS[ip]}" ]] && {
   API_URL+="&myip=${OPTS[ip]}"
 } || {
@@ -18,14 +20,16 @@ IP_PROVIDER=""
 }
 [[ -z "${OPTS[ip]}" ]] && OPTS[ip]="NOT_DETECTED"
 
-print_log "IP: ${OPTS[ip]}"
+declare -a req_cmd=(curl -ks --basic -u "${OPTS[user]}:${OPTS[pass]}")
+"${req_cmd[@]}" --version >/dev/null 2>/dev/null \
+|| req_cmd=(wget --auth-no-challenge --user="${OPTS[user]}" --password="${OPTS[pass]}" -qO -)
+
+log_info "IP: ${OPTS[ip]}"
 
 [[ -z "${OPTS[hosts]}" ]] && {
-  result="$(
-    curl -ks --basic -u "${OPTS[user]}:${OPTS[pass]}" \
-      -K - <<< "url=${API_URL}"
-  )"
-  print_log "(all) ${result}"
+  result="$("${req_cmd[@]}" "${API_URL}")" \
+  && log_info "(all) ${result}" \
+  || log_warn "(all) ${result}"
   exit
 }
 
@@ -37,9 +41,7 @@ csv_hosts="$(
 )"
 
 for h in ${csv_hosts}; do
-  result="$(
-    curl -ks --basic -u "${OPTS[user]}:${OPTS[pass]}" \
-      -K - <<< "url=${API_URL}&hostname=${h}"
-  )"
-  print_log "(${h}) ${result}"
+  result="$("${req_cmd[@]}" "${API_URL}&hostname=${h}")" \
+  && log_info "(${h}) ${result}" \
+  || log_warn "(${h}) ${result}"
 done

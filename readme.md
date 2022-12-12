@@ -7,11 +7,8 @@
 sudo git clone https://github.com/varlogerr/toolbox.ddns.git /opt/varlog/toolbox.ddns
 # check pathadd.append function is installed
 type -t pathadd.append
-# in case output is "function" you can make use
-# of pathadd-based bash hook. Otherwise add
-# '/opt/varlog/toolbox.ddns/bin' directory
-# to the PATH manually
-echo '. /opt/varlog/toolbox.ddns/hook-pathadd.bash' >> ~/.bashrc
+# to add bin directory to the PATH
+echo '. /opt/varlog/toolbox.ddns/source.bash' >> ~/.bashrc
 # reload ~/.bashrc
 . ~/.bashrc
 # explore the tools

@@ -11,6 +11,8 @@ IP_PROVIDER="https://ydns.io/api/v1/ip"
 
 . "${TOOL_DIR}/lib/bootstrap.sh"
 
+LOG_TOOLNAME=ydns
+
 [[ -z "${OPTS[ip]}" ]] && {
   OPTS[ip]="$(get_current_ip)"
 }
@@ -21,7 +23,7 @@ IP_PROVIDER="https://ydns.io/api/v1/ip"
 
 API_URL+="&ip=${OPTS[ip]}"
 
-print_log "IP: ${OPTS[ip]}"
+log_info "IP: ${OPTS[ip]}"
 
 # convert from newline and comma separated
 # to space separated
@@ -30,10 +32,12 @@ csv_hosts="$(
   | tr '\n' ' '
 )"
 
+declare -a req_cmd=(curl -ks --basic -u "${OPTS[user]}:${OPTS[pass]}")
+"${req_cmd[@]}" --version >/dev/null 2>/dev/null \
+|| req_cmd=(wget --auth-no-challenge --user="${OPTS[user]}" --password="${OPTS[pass]}" -qO -)
+
 for h in ${csv_hosts}; do
-  result="$(
-    curl -ks --basic -u "${OPTS[user]}:${OPTS[pass]}" \
-      -K - <<< "url=${API_URL}&host=${h}"
-  )"
-  print_log "(${h}) ${result}"
+  result="$("${req_cmd[@]}" "${API_URL}&host=${h}")" \
+  && log_info "(${h}) ${result}" \
+  || log_warn "(${h}) ${result}"
 done

@@ -26,5 +26,5 @@ HELP_DEMO="
   # update specific domains to
   # specific ip
   ${THE_SCRIPT} -p foo -u bar -i 8.8.8.8 \\
-  x.giize.com y.giize.com
+ .  x.giize.com y.giize.com
 "

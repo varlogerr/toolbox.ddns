@@ -8,9 +8,9 @@ HELP_DIR="${LIB_DIR}/help"
 . "${HELP_DIR}/${DDNS_PROVIDER}.sh"
 
 # load functions
-. "${LIB_DIR}/func.sh"
+. "${LIB_DIR}/shlib.sh"
 
-detect_help "${@}" && exit
+trap_help_opt "${@}" && print_help && exit
 
 # common options
 . "${OPTS_DIR}/base.sh"
